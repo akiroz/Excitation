@@ -1,36 +1,36 @@
-//
-//  ExcitationTests.swift
-//  ExcitationTests
-//
-//  Created by boris on 9/5/2018.
-//  Copyright © 2018 akiroz. All rights reserved.
-//
-
 import XCTest
 @testable import Excitation
 
 class ExcitationTests: XCTestCase {
     
-    override func setUp() {
-        super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    func testNoData() {
+        let e = Emitter<None>()
+        var pass = false
+        let _ = e.observe { pass = true }
+        e.emit()
+        XCTAssert(pass)
     }
     
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
+    func testWithData() {
+        let e = Emitter<Int>()
+        var result = 0
+        let _ = e.observe { r in result = r }
+        e.emit(1)
+        XCTAssert(result == 1)
     }
     
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func testWithDataDiscarded() {
+        let e = Emitter<Int>()
+        var pass = false
+        let _ = e.observe { pass = true }
+        e.emit(1)
+        XCTAssert(pass)
     }
     
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
+    func testRemoveObserver() {
+        let e = Emitter<None>()
+        let ob = e.observe { XCTFail() }
+        e.remove(ob)
+        e.emit()
     }
-    
 }
