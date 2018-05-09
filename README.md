@@ -4,9 +4,9 @@
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A thin wrapper around NotificationCenter for supporting event-driven code.
+A thin wrapper around `NotificationCenter` and `DispatchQueue` for supporting event-driven code.
 
-Event handlers are dispatched synchronously as is NotificationCenter.
+Excitation supports both sync and async events via `DispatchQueue.main`.
 
 ## Install
 
@@ -37,12 +37,13 @@ e.observe {
 // Emit event
 e.emit()
 
-// Example: Event with Data
+// Example: Event with Data & Async
 // =====================================================
 
 let e = Emitter<Int>()
 e.observe { n in print(n) } // prints 1
-e.observe { print("hi") }   // prints hi
+e.observe { print("hi") }
+e.observeAsync { print("async handler") }
 e.emit(1)
 
 // Example: Remove Handlers

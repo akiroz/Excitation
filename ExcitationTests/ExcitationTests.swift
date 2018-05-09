@@ -33,4 +33,23 @@ class ExcitationTests: XCTestCase {
         e.remove(ob)
         e.emit()
     }
+    
+    func testAsyncNoData() {
+        let e = Emitter<None>()
+        let ex = XCTestExpectation(description: "async event")
+        let _ = e.observeAsync { ex.fulfill() }
+        e.emit()
+        wait(for: [ex], timeout: 1)
+    }
+    
+    func testAsyncWithData() {
+        let e = Emitter<Int>()
+        let ex = XCTestExpectation(description: "async event")
+        let _ = e.observeAsync { n in
+            XCTAssert( n == 1 )
+            ex.fulfill()
+        }
+        e.emit(1)
+        wait(for: [ex], timeout: 1)
+    }
 }

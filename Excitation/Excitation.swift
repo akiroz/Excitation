@@ -45,7 +45,7 @@ public class Emitter<T> {
     }
     
     public func observe(_ f: @escaping ()->Void) -> Observer<T> {
-        return self.observe({ (_: T) in f() })
+        return self.observe { (_: T) in f() }
     }
     public func observe(_ f: @escaping (T)->Void) -> Observer<T> {
         let ob = Observer<T>(f)
@@ -54,6 +54,15 @@ public class Emitter<T> {
             name: nn, object: nil)
         obRef[ObjectIdentifier(ob)] = ob
         return ob
+    }
+
+    public func observeAsync(_ f: @escaping ()->Void) -> Observer<T> {
+        return self.observeAsync { (_: T) in f() }
+    }
+    public func observeAsync(_ f: @escaping (T)->Void) -> Observer<T> {
+        return self.observe { data in
+            DispatchQueue.main.async { f(data) }
+        }
     }
     
     public func remove(_ ob: Observer<T>) {
