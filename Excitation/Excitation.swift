@@ -34,6 +34,8 @@ public class Emitter<T> {
     let nc = NotificationCenter()
     let nn = Notification.Name("ExcitationEvent")
     var obRef = [ObjectIdentifier: Observer<T>]()
+
+    public init() {}
     
     public func emit() {
         nc.post(name: nn, object: nil)
